@@ -11,24 +11,34 @@
         $file;
         if (is_uploaded_file($_FILES["file"]["tmp_name"])) {
             $file=$_FILES["file"]["tmp_name"];
-            move_uploaded_file($_FILES["file"]["tmp_name"], $_FILES["file"]["name"]);
-            $temp_file_name = substr($_FILES['file']['tmp_name'],
+            //move_uploaded_file($_FILES["file"]["tmp_name"], $_FILES["file"]["name"]);
+            //move_uploaded_file($_FILES["file"]["tmp_name"], './temp/'.$_FILES["file"]["name"]);
+            
+            
+            $temp_file_name_with_ext = substr($_FILES['file']['tmp_name'],
             1 + strrpos($_FILES['file']['tmp_name'], "\\"));
+            echo('-------Temp name+ ext: '.$temp_file_name_with_ext);
+            $temp_file_name=basename($_FILES['file']['tmp_name'], ".tmp");
+            //substr($temp_file_name_with_ext, 1 + strrpos($temp_file_name_with_ext, "."));
             echo('-------Temp name: '.$temp_file_name);
+            $new_temp_file_name=$temp_file_name.'_'.$_FILES["file"]["name"];
+            move_uploaded_file($_FILES["file"]["tmp_name"], './temp/'.$new_temp_file_name);
+
+            $uplfilePath='./temp/'.$new_temp_file_name;
+            
 
             echo "File was posted. Path: ".$file;
-            echo('---------');
+            echo('---------$file: ');
             $file=$_FILES["file"]["name"];
             print_r($file);
-            echo('---------'.$_FILES["file"]["name"]);
-            $pure_file = json_decode(file_get_contents($_FILES['file']['name'], true));
-            echo("sfgge: ".$_FILES["file"]["name"]);
+            echo('---------Имя загружаемого файла: '.$_FILES["file"]["name"]);
+            //$pure_file = json_decode(file_get_contents($_FILES['file']['name'], true));
             //print_r($_FILES);
             echo("Type of file: ".$_POST["type"]);
-            echo('--------- PURE :');
-            print_r($pure_file);
-           
-            getDataFromFile($file);
+            //echo('--------- PURE :');
+            //print_r($pure_file);
+            echo("uplfilePath: ".$uplfilePath);
+            getDataFromFile($uplfilePath);
             exit;
         }else {  
             echo 'No file was posted';
