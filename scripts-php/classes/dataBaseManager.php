@@ -29,21 +29,67 @@ class dataBaseManager {
         $dbconnect = pg_connect($this->db_connection_string);
         if (!$dbconnect) {
             die('Could not connect');
+            return false;
         }
         else {
-            $db_connection=$dbconnect;
+            $this->db_connection=$dbconnect;
             // set schema
-            /*$query = "SET search_path TO ftei;";
+            $query = "SET search_path TO ftei;";
             $res = pg_query($dbconnect, $query);
-            
-            //getting data from db
-            $query = "SELECT * FROM main_info_tb";
-            $res = pg_query($dbconnect, $query);
-            while ($row = pg_fetch_row($res)) {
-                echo "tableName: $row[0] columnName: $row[1]";
-                echo "<br />\n";
-            }*/
+                 
             return true;
+        }
+        
+    }
+
+    public function getDBMainContent (){
+        $dbconnect=$this->db_connection;
+        //getting data from db
+        $query = "SELECT * FROM main_info_tb";
+        $res = pg_query($dbconnect, $query);
+        /*while ($row = pg_fetch_row($res)) {
+            echo "tableName: $row[0] columnName: $row[1]";
+            echo "<br />\n";
+        }*/
+
+        while($row = pg_fetch_assoc($res))
+        {
+            $data[] = $row;
+        }
+        
+        //print_r($data);
+
+        if(isset($data))
+        {
+            header('Content-Type: application/json');
+            //$noSlashes = str_replace("\\\\","",$data); /* no need for json_encode() */
+            //$data = array_values($noSlashes[0]);
+            /*foreach($data as $value)
+            {
+                //print_r($value);
+                $value=str_replace("\\","",$value);
+            }*/
+            //$test = str_replace('\\\\', '\\', json_encode($data));
+            echo json_encode($data);
+        }
+    }
+    public function getDBIndContentByOKPO ($okpo){
+        $dbconnect=$this->db_connection;
+        //getting data from db
+        $query = "SELECT * FROM indexes WHERE okpo='".$okpo."'";
+        $res = pg_query($dbconnect, $query);
+
+        while($row = pg_fetch_assoc($res))
+        {
+            $data[] = $row;
+        }
+        
+        //print_r($data);
+
+        if(isset($data))
+        {
+            header('Content-Type: application/json');
+            echo json_encode($data);
         }
     }
 }
