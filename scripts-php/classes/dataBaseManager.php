@@ -92,4 +92,46 @@ class dataBaseManager {
             echo json_encode($data);
         }
     }
+
+    public function saveData($data_json_string){
+        $dbconnect=$this->db_connection;
+
+        //make array of assoc arrays fron json string
+        $data = json_decode($data_json_string, true);
+
+        foreach($data as $row) {
+            //check if company exists in main_info_tb
+            $query = "SELECT exists (select * FROM main_info_tb WHERE okpo='{$row['okpo']}')";
+            $res = pg_query($dbconnect, $query);
+            //$main
+            //echo (PHP_EOL.$res);
+            if ($res){
+                //update or add values
+                $query = "INSERT INTO main_info_tb (okpo) VALUES('{$row['okpo']}');
+                INSERT INTO indexes(okpo) VALUES('{$row['okpo']}')";
+                $res = pg_query($dbconnect, $query);
+            }
+            $this->updateRow($row);
+            //print_r($row);
+            //echo("---".count($csv).PHP_EOL);
+        }
+
+        //print_r($data);
+
+        //$query = "SELECT * FROM indexes WHERE okpo='".$okpo."'";
+        //$res = pg_query($dbconnect, $query); ???
+
+    }
+    public function updateRow($row){
+        foreach ($row as $key => $table_item){
+            if($key !='okpo'){
+                //echo(PHP_EOL.$key);
+                $table_name='indexes';
+                if($key =='name') $table_name='main_info_tb';
+                $query = "UPDATE {$table_name} SET {$key} = '{$table_item}'  WHERE okpo='{$row['okpo']}'";
+                
+                $res = pg_query($this->db_connection, $query);
+            }
+        }
+    }
 }

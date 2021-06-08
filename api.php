@@ -56,6 +56,16 @@
         return false;
 
     }
+    elseif ( $_POST["action"]=="saveToDB"){
+        $dataBaseManager = new dataBaseManager;
+        if ($dataBaseManager->connectToDb()){
+            $data=$dataBaseManager->saveData($_POST["data_to_save"]);
+            return  $data;
+            //echo "GOT CONNECTION";
+        }
+        else alert("OOPS NO CONNECTION");
+        return false;
+    }
     elseif ($_POST["action"]=="getDBContent"){
         $dataBaseManager = new dataBaseManager;
         if ($dataBaseManager->connectToDb()){
