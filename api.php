@@ -1,18 +1,5 @@
 <?php
     
-<<<<<<< HEAD
-	require_once('./scripts-php/upload.php');
-	require_once('./scripts-php/upload.php');
-	require_once('./scripts-php/upload.php');
-    /*$file;
-    if (isset($_FILES["file"]["tmp_name"])) {
-        $file=$_FILES["file"]["tmp_name"];
-        echo "done";
-        exit;
-    }else {  
-        echo 'Data not received';
-     }
-=======
 	//require_once('./scripts-php/upload.php');
     header('Access-Control-Allow-Origin: http://localhost:3000');  
     require_once(__DIR__.'/scripts-php/classes/dataVisualiser.php');
@@ -77,13 +64,9 @@
         else alert("OOPS NO CONNECTION");
 
     }
->>>>>>> 5b166e0... added getDBIndContentByOKPO
 
     header('Access-Control-Allow-Origin: *');  
     
-<<<<<<< HEAD
-	*/
-=======
     function getDataFromFile($file){
         $dataVisualiser = new dataVisualiser;
         if($_POST["type"]=='csv' || $_POST["type"]=='CSV')
@@ -100,7 +83,6 @@
         }
     }
 	
->>>>>>> 5b166e0... added getDBIndContentByOKPO
     //uploadData($_FILES["file"]["tmp_name"]);
     /*if (move_uploaded_file($_FILES["file"]["tmp_name"], "upload/".$_FILES['file']['name'])) {
         echo "done";
