@@ -80,7 +80,7 @@
         $dataVisualiser = new dataVisualiser;
         if($_POST["type"]=='csv' || $_POST["type"]=='CSV')
         {
-            $data=$dataVisualiser->getDataFromCSVFileByPath($file);
+            $data = $dataVisualiser->getDataFromCSVFileByPath($file);
             //echo $file;
             //$data=$dataVisualiser->getDataFromCSVFileByPath('./'.$tmp_name);
             //echo "Данные файла: ".PHP_EOL;
@@ -88,7 +88,8 @@
             return $data;
         }
         elseif ($_POST["type"]=='dbf' || $_POST["type"]=='DBF'){
-
+            $data = $dataVisualiser->getDataFromDBFFileByPath($file);
+            return $data;
         }
     }
 	

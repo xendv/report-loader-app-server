@@ -18,14 +18,6 @@ class dataVisualiser {
     public $rowDelimiter='\n';
     public $header=[];
 
-    /*public function getDataFromDB(){
-        $dataBaseManager = new dataBaseManager;
-        if ($dataBaseManager->connectToDb()){
-            alert("Connected");
-        }
-        else alert("Error in connection");
-    }*/
-
     public function getDataFromCSVFileByPath($file_path, $col_delimiter = '|', $row_delimiter = '\\n',  $file_encodings = ['cp1251','UTF-8']){
         //checking file existence
         if( ! file_exists($file_path) )
@@ -66,7 +58,36 @@ class dataVisualiser {
         }
     }
 
-    public function getDataFromDBFFileByPath($file_path, $col_delimiter = '|', $row_delimiter = '\n',  $file_encodings = ['cp1251','UTF-8']){
+    public function getDataFromDBFFileByPath($file_path, $file_encodings = ['cp1251','UTF-8']){
+        if( ! file_exists($file_path) )
+        return false;
+        else{
+            $db = dbase_open($file_path, 0);
+            if ($db){
+                //getting headers
+                $headers = [];
+                foreach (dbase_get_header_info($db) as $header){
+                    array_push($headers, strtolower($header['name']));
+                } 
+                $this->header=$headers;
+                array_push($headers, 'deleted');
+                $dbf = [];
+                //combining array
+                for($lineNumber = 1; $lineNumber <= dbase_numrecords($db); $lineNumber++) {
+                    $row = dbase_get_record($db, $lineNumber);
 
+                    array_push($dbf, array_combine($headers, $row));
+                }
+
+                $data=json_encode($dbf);
+                dbase_close($db);
+                //delete temp file
+                unlink($file_path);
+                
+                return $data;
+
+            }
+            else return "COULDN'T OPEN DBF FILE";
+        }
     }
 }
